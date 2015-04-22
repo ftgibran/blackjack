@@ -7,32 +7,37 @@ import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
-
 public class MainMenuActivity extends Activity {
+
+	protected MainMenuView mainMenuView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		//turn title off
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		super.onCreate(savedInstanceState);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		//set to full screen
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		mainMenuView = new MainMenuView(this);
+		setContentView(mainMenuView);
+	}
 
-		setContentView(new MainMenuView(this));
+	@Override
+	protected void onResume() {
+		super.onResume();
+		mainMenuView.resume();
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		mainMenuView.pause();
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
 		if(event.getAction() == MotionEvent.ACTION_DOWN)
-		{
-			//System.out.println("Hello world!");
-			//Intent info_act = new Intent("android.intent.action.BLACKJACK");
-			//startActivity(info_act);
 			startActivity(new Intent(MainMenuActivity.this, BlackjackActivity.class));
-		}
 		return super.onTouchEvent(event);
 	}
 }

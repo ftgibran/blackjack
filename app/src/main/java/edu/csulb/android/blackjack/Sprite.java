@@ -23,7 +23,6 @@ public class Sprite {
 	protected float sy = 0;
 
 	protected float width;
-
 	protected float height;
 
 	protected float dt = 1.f;

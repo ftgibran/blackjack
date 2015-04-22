@@ -7,15 +7,18 @@ import android.view.SurfaceView;
 /**
  * Created by FelipeGibran on 4/18/2015.
  */
-public class MainThread extends Thread{
-	private int FPS = 60;
-	private double averageFPS;
+public class GameThread extends Thread {
+
+	private final static int MAX_FPS = 60; //desired fps
+	private final static int FRAME_PERIOD = 1000 / MAX_FPS; // the frame period
+
+	private long averageFPS;
+	private boolean running = false;
 	private SurfaceHolder surfaceHolder;
 	private SurfaceView surfaceView;
-	private boolean running;
 	public static Canvas canvas;
 
-	public MainThread(SurfaceHolder surfaceHolder, SurfaceView surfaceView) {
+	public GameThread(SurfaceHolder surfaceHolder, SurfaceView surfaceView) {
 		super();
 		this.surfaceHolder = surfaceHolder;
 		this.surfaceView = surfaceView;
@@ -28,16 +31,15 @@ public class MainThread extends Thread{
 		long waitTime;
 		long totalTime = 0;
 		int frameCount = 0;
-		long targetTime = 1000/FPS;
+		long targetTime = FRAME_PERIOD;
 
-		while(running) {
+		while(isRunning()) {
 			startTime = System.nanoTime();
 			canvas = null;
 
 			try {
 				canvas = this.surfaceHolder.lockCanvas();
 				synchronized (surfaceHolder) {
-					//this.view.update();
 					this.surfaceView.draw(canvas);
 				}
 			}catch(Exception e) {}
@@ -61,16 +63,27 @@ public class MainThread extends Thread{
 
 			totalTime += System.nanoTime()-startTime;
 			frameCount++;
-			if(frameCount == FPS) {
+			if(frameCount == MAX_FPS) {
 				averageFPS = 1000 / ((totalTime / frameCount) / 1000000);
 				frameCount = 0;
 				totalTime = 0;
-				//System.out.println(averageFPS);
 			}
 		}
 	}
 
-	public void setRunning(boolean b) {
-		running = b;
+	public boolean isRunning() {
+		return running;
+	}
+
+	public void setRunning(boolean running) {
+		this.running = running;
+	}
+
+	public long getAverageFPS() {
+		return averageFPS;
+	}
+
+	public void setAverageFPS(int averageFPS) {
+		this.averageFPS = averageFPS;
 	}
 }
