@@ -1,4 +1,4 @@
-package edu.csulb.android.blackjack;
+package edu.csulb.android.blackjack.Game;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -7,10 +7,13 @@ import java.util.Collections;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
+import edu.csulb.android.blackjack.R;
+import edu.csulb.android.blackjack.Utilities.GameObject;
+
 /**
  * Created by FelipeGibran on 4/18/2015.
  */
-public class Deck extends Sprite{
+public class Deck extends GameObject {
 
 	private static final boolean DEFAULT_VISIBILITY = false;
 	public static final int DEFAULT_DECK_DRAWABLE = R.drawable.card_deck;
@@ -22,7 +25,8 @@ public class Deck extends Sprite{
 		setCardPool();
 	}
 
-	public void draw(Canvas canvas){
+	@Override
+	public void render(Canvas canvas){
 		float x = getX();
 		float y =getY();
 		for(int i=0; i < cardPool.size(); i += 5)
@@ -30,16 +34,35 @@ public class Deck extends Sprite{
 			Card c = cardPool.get(i);
 			c.setX(x);
 			c.setY(y);
-			c.draw(canvas);
+			c.render(canvas);
 			x -= 1.5f;
 			y -= 1.5f;
 		}
 	}
 
+	@Override
 	public void setBitmap(Bitmap bitmap)
 	{
+		width = 0;
+		height = 0;
 		for(Card c: cardPool)
 			c.setBitmap(bitmap);
+	}
+
+	@Override
+	public float getWidth() {
+		if(cardPool.isEmpty())
+			return 0;
+		else
+			return cardPool.get(0).getWidth();
+	}
+
+	@Override
+	public float getHeight() {
+		if(cardPool.isEmpty())
+			return 0;
+		else
+			return cardPool.get(0).getHeight();
 	}
 
 	public Card pop()
@@ -49,6 +72,9 @@ public class Deck extends Sprite{
 	public Card pop(boolean visibility)
 	{
 		Card c;
+
+		cardPool.peek().flip();
+		//BlackjackManager.sleep(1000);
 
 		try {
 			c = cardPool.pop();

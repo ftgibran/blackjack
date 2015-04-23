@@ -1,27 +1,20 @@
-package edu.csulb.android.blackjack;
-
-import android.graphics.Canvas;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+package edu.csulb.android.blackjack.Utilities;
 
 /**
  * Created by FelipeGibran on 4/18/2015.
  */
-public class GameThread extends Thread {
+public class UpdateThread extends Thread {
 
 	private final static int MAX_FPS = 60; //desired fps
 	private final static int FRAME_PERIOD = 1000 / MAX_FPS; // the frame period
 
 	private long averageFPS;
 	private boolean running = false;
-	private SurfaceHolder surfaceHolder;
-	private SurfaceView surfaceView;
-	public static Canvas canvas;
+	private Stage stage;
 
-	public GameThread(SurfaceHolder surfaceHolder, SurfaceView surfaceView) {
+	public UpdateThread(Stage stage) {
 		super();
-		this.surfaceHolder = surfaceHolder;
-		this.surfaceView = surfaceView;
+		this.stage = stage;
 	}
 
 	@Override
@@ -35,24 +28,8 @@ public class GameThread extends Thread {
 
 		while(isRunning()) {
 			startTime = System.nanoTime();
-			canvas = null;
 
-			try {
-				canvas = this.surfaceHolder.lockCanvas();
-				synchronized (surfaceHolder) {
-					this.surfaceView.draw(canvas);
-				}
-			}catch(Exception e) {}
-			finally {
-				if (canvas != null) {
-					try {
-						surfaceHolder.unlockCanvasAndPost(canvas);
-					}catch (Exception e)
-					{
-						e.printStackTrace();
-					}
-				}
-			}
+			stage.update();
 
 			timeMillis = (System.nanoTime() - startTime) / 1000000;
 			waitTime = targetTime-timeMillis;

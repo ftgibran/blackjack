@@ -1,13 +1,15 @@
-package edu.csulb.android.blackjack;
+package edu.csulb.android.blackjack.Game;
 
 import android.graphics.Bitmap;
 
 import java.util.Random;
 
+import edu.csulb.android.blackjack.Utilities.GameObject;
+
 /**
  * Created by FelipeGibran on 4/18/2015.
  */
-public class Card extends Sprite{
+public class Card extends GameObject {
 
 	private int					cardID;
 

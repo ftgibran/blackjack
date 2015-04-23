@@ -1,4 +1,4 @@
-package edu.csulb.android.blackjack;
+package edu.csulb.android.blackjack.Game;
 
 import android.app.Activity;
 import android.os.Bundle;

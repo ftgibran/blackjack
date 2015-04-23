@@ -1,4 +1,4 @@
-package edu.csulb.android.blackjack;
+package edu.csulb.android.blackjack.Utilities;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -6,10 +6,9 @@ import android.graphics.Canvas;
 /**
  * Created by FelipeGibran on 4/19/2015.
  */
-public class Sprite {
+public class GameObject implements Renderable {
 
 	protected static final float GRAVITY = 9.8f;
-	protected static final boolean HAS_GRAVITY = false;
 
 	protected Bitmap bitmap;
 
@@ -27,25 +26,30 @@ public class Sprite {
 
 	protected float dt = 1.f;
 
-	protected boolean hasGravity = HAS_GRAVITY;
-
-	public Sprite()
+	public GameObject()
 	{
-
 	}
 
-	public Sprite(Bitmap bitmap) {
+	public GameObject(Bitmap bitmap) {
 		setBitmap(bitmap);
 	}
 
-	public Sprite(Bitmap bitmap,float x, float y) {
+	public GameObject(Bitmap bitmap,float x, float y) {
 		setBitmap(bitmap);
 		setX(x);
 		setY(y);
 	}
 
-	public void update()
-	{
+	public void setRenderListener(Stage stage) {
+		stage.getListeners().add(this);
+	}
+
+	public void removeRenderListener(Stage stage) {
+		stage.getListeners().remove(this);
+	}
+
+	@Override
+	public void update() {
 		vx += sx*dt;
 		vy += sy*dt;
 
@@ -53,10 +57,10 @@ public class Sprite {
 		y += vy *dt;
 	}
 
-	public void draw(Canvas canvas)
-	{
-		canvas.drawBitmap(bitmap,x,y,null);
-		update();
+	@Override
+	public void render(Canvas canvas) {
+		if(bitmap != null)
+			canvas.drawBitmap(bitmap, x, y, null);
 	}
 
 	public Bitmap getBitmap()
@@ -72,89 +76,50 @@ public class Sprite {
 		this.bitmap = Bitmap.createScaledBitmap(this.bitmap,(int)width,(int)height, true);
 	}
 
-	public void setGravityOn()
-	{
-		if(hasGravity) return;
-		hasGravity = true;
-		sy += GRAVITY;
-	}
-
-	public void setGravityOff()
-	{
-		if(!hasGravity) return;
-		hasGravity = false;
-		sy -= GRAVITY;
-	}
-
 	public float getX() {
 		return x;
 	}
-
 	public void setX(float x) {
 		this.x = x;
 	}
-
 	public float getY() {
 		return y;
 	}
-
 	public void setY(float y) {
 		this.y = y;
 	}
-
 	public float getVx() {
 		return vx;
 	}
-
 	public void setVx(float vx) {
 		this.vx = vx;
 	}
-
 	public float getVy() {
 		return vy;
 	}
-
 	public void setVy(float vy) {
 		this.vy = vy;
 	}
-
 	public float getSx() { return sx; }
-
 	public void setSx(float sx) { this.sx = sx; }
-
 	public float getSy() { return sy; }
-
 	public void setSy(float sy) { this.sy = sy; }
-
 	public float getDt() {
 		return dt;
 	}
-
 	public void setDt(float dt) {
 		this.dt = dt;
 	}
-
-	public boolean isHasGravity() {
-		return hasGravity;
-	}
-
-	public void setHasGravity(boolean hasGravity) {
-		this.hasGravity = hasGravity;
-	}
-
 	public float getWidth() {
 		return width;
 	}
-
 	public void setWidth(float width) {
 		this.width = width;
 		this.bitmap = Bitmap.createScaledBitmap(this.bitmap,(int)width,(int)height, true);
 	}
-
 	public float getHeight() {
 		return height;
 	}
-
 	public void setHeight(float height) {
 		this.height = height;
 		this.bitmap = Bitmap.createScaledBitmap(this.bitmap,(int)width,(int)height, true);

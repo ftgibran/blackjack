@@ -1,4 +1,4 @@
-package edu.csulb.android.blackjack;
+package edu.csulb.android.blackjack.MainMenu;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
+
+import edu.csulb.android.blackjack.Game.BlackjackActivity;
 
 public class MainMenuActivity extends Activity {
 
