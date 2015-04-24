@@ -2,6 +2,7 @@ package edu.csulb.android.blackjack.Game;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.widget.Button;
 
 import edu.csulb.android.blackjack.R;
 import edu.csulb.android.blackjack.Utilities.GameObject;
@@ -59,6 +60,7 @@ public class BlackjackManager extends GameObject{
 		player.setY(stage.screenHeight - deck.getHeight() -  10);
 		player.setRenderListener(stage);
 
+
 	}
 
 	/**
@@ -68,15 +70,24 @@ public class BlackjackManager extends GameObject{
 	public void update() {
 
 		while (retry) {
+			sleep();
 			player.pickCard(deck.pop(true));
+			sleep();
 			player.pickCard(deck.pop(true));
+			sleep();
 			player.pickCard(deck.pop(true));
+			sleep();
 			player.pickCard(deck.pop(true));
+			sleep();
 			player.pickCard(deck.pop(true));
+			sleep();
 
 			dealer.pickCard(deck.pop(false));
+			sleep();
 			dealer.pickCard(deck.pop(true));
+			sleep();
 
+			deck.peek().flip();
 			retry = false;
 		}
 
@@ -254,27 +265,8 @@ public class BlackjackManager extends GameObject{
 		System.out.print(m);
 	}
 
-	/**
-	 * It delays the processor
-	 * @param time Time in milliseconds
-	 */
-	public static void sleep(int time)
-	{
-		try {
-			Thread.sleep(time);
-		} catch(InterruptedException ex) {
-			Thread.currentThread().interrupt();
-		}
+	public void sleep() {
+		stage.delay(DEFAULT_SLEEP_TIME);
 	}
 
-	/**
-	 * A fake loading delay
-	 */
-	public static void loadingSleep()
-	{
-		BlackjackManager.sleep(DEFAULT_SLEEP_TIME); BlackjackManager.showInLine(".");
-		BlackjackManager.sleep(DEFAULT_SLEEP_TIME); BlackjackManager.showInLine(".");
-		BlackjackManager.sleep(DEFAULT_SLEEP_TIME); BlackjackManager.show(".");
-		BlackjackManager.sleep(DEFAULT_SLEEP_TIME);
-	}
 }

@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * Created by FelipeGibran on 4/18/2015.
+ *
  */
 public abstract class Stage extends SurfaceView implements SurfaceHolder.Callback, Renderable {
 
@@ -25,6 +26,11 @@ public abstract class Stage extends SurfaceView implements SurfaceHolder.Callbac
 	public int screenWidth;
 	public int screenHeight;
 
+	/**
+	 * Creates a Stage that manages the loop of the Game.
+	 * It has two loops from UpdateThread Class that uses update() method and Render Thread Class that uses render() method.
+	 * @param context
+	 */
 	public Stage(Context context) {
 		super(context);
 		this.context = context;
@@ -73,6 +79,10 @@ public abstract class Stage extends SurfaceView implements SurfaceHolder.Callbac
 		}
 	}
 
+	/**
+	 * This is a Thread from UpdateThread class responsible to update data.
+	 * It has a loop of 60 fps.
+	 */
 	@Override
 	public void update()
 	{
@@ -80,6 +90,11 @@ public abstract class Stage extends SurfaceView implements SurfaceHolder.Callbac
 			r.update();
 	}
 
+	/**
+	 * This is a Thread from RenderThread class responsible to render bitmaps image.
+	 * It has a loop of 60 fps.
+	 * @param canvas Canvas.
+	 */
 	@Override
 	public void render(Canvas canvas)
 	{
@@ -87,15 +102,53 @@ public abstract class Stage extends SurfaceView implements SurfaceHolder.Callbac
 			r.render(canvas);
 	}
 
+	/**
+	 * Gets listeners of the UpdateThread and RenderThread.
+	 * @return List of listeners.
+	 */
 	public List<Renderable> getListeners() {
 		return listeners;
 	}
 
-	public UpdateThread Game() {
+	/**
+	 * Gets UpdateThread.
+	 * @return UpdateThreads.
+	 */
+	public UpdateThread getUpdateThread() {
 		return updateThread;
 	}
 
-	public RenderThread Render() {
+	/**
+	 * Gets RenderThread.
+	 * @return RenderThread.
+	 */
+	public RenderThread getRenderThread() {
 		return renderThread;
+	}
+
+	/**
+	 * Sleep on the UpdateThread.
+	 * @param time sleep time in milliseconds.
+	 */
+	public void delay(long time)
+	{
+		try {
+			updateThread.sleep(time);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Sleep on the RenderThread.
+	 * @param time sleep time in milliseconds.
+	 */
+	public void RenderDelay(long time)
+	{
+		try {
+			renderThread.sleep(time);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -29,7 +29,7 @@ public class Deck extends GameObject {
 	public void render(Canvas canvas){
 		float x = getX();
 		float y =getY();
-		for(int i=0; i < cardPool.size(); i += 5)
+		for(int i=0; i < cardPool.size()-1; i += 5)
 		{
 			Card c = cardPool.get(i);
 			c.setX(x);
@@ -38,6 +38,11 @@ public class Deck extends GameObject {
 			x -= 1.5f;
 			y -= 1.5f;
 		}
+
+		Card last = peek();
+		last.setX(x);
+		last.setY(y);
+		last.render(canvas);
 	}
 
 	@Override
@@ -74,7 +79,7 @@ public class Deck extends GameObject {
 		Card c;
 
 		cardPool.peek().flip();
-		//BlackjackManager.sleep(1000);
+		stage.delay(1000);
 
 		try {
 			c = cardPool.pop();

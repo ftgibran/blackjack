@@ -13,6 +13,7 @@ import edu.csulb.android.blackjack.Utilities.Stage;
 
 /**
  * Created by FelipeGibran on 4/18/2015.
+ *
  */
 public class MainMenuView extends Stage {
 	//
@@ -48,6 +49,10 @@ public class MainMenuView extends Stage {
 	public void surfaceDestroyed(SurfaceHolder holder) {
 	}
 
+	/**
+	 * Custom GameObject Class named Background.
+	 * It means this GameObject has a custom behavior.
+	 */
 	public class Background extends GameObject {
 
 		static final float DEFAULT_VX = -.5f;
@@ -77,6 +82,10 @@ public class MainMenuView extends Stage {
 		}
 	}
 
+	/**
+	 * Custom GameObject Class named BlackjackLogo.
+	 * It means this GameObject has a custom behavior.
+	 */
 	public class BlackjackLogo extends GameObject
 	{
 		public BlackjackLogo(Bitmap bitmap) {
@@ -86,6 +95,10 @@ public class MainMenuView extends Stage {
 		}
 	}
 
+	/**
+	 * Custom GameObject Class named TapString.
+	 * It means this GameObject has a custom behavior.
+	 */
 	public class TapString extends GameObject {
 
 		int alpha = 255;

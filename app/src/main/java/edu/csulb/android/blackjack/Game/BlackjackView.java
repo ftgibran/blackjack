@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.SurfaceHolder;
+import android.widget.Button;
 
 import edu.csulb.android.blackjack.R;
 import edu.csulb.android.blackjack.Utilities.GameObject;
@@ -20,10 +21,13 @@ public class BlackjackView extends Stage {
 	private GameObject texture1;
 	private GameObject texture2;
 	private Deck deck;
+
+	Button btn;
 	//
 
 	public BlackjackView(Context context) {
 		super(context);
+		setFocusable(true);
 	}
 
 	@Override
@@ -80,4 +84,5 @@ public class BlackjackView extends Stage {
 			x = screenWidth/2 - width/2;
 		}
 	}
+
 }
