@@ -3,8 +3,8 @@ package edu.csulb.android.blackjack.Game;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.AttributeSet;
 import android.view.SurfaceHolder;
-import android.widget.Button;
 
 import edu.csulb.android.blackjack.R;
 import edu.csulb.android.blackjack.Utilities.GameObject;
@@ -12,22 +12,18 @@ import edu.csulb.android.blackjack.Utilities.Stage;
 
 /**
  * Created by FelipeGibran on 4/21/2015.
+ *
  */
 public class BlackjackView extends Stage {
 
-	//
-	private BlackjackManager blackjackManager;
-	private GameObject background;
-	private GameObject texture1;
-	private GameObject texture2;
-	private Deck deck;
-
-	Button btn;
-	//
+	public BlackjackManager game;
 
 	public BlackjackView(Context context) {
 		super(context);
-		setFocusable(true);
+	}
+
+	public BlackjackView(Context context, AttributeSet attrs){
+		super(context, attrs);
 	}
 
 	@Override
@@ -35,16 +31,16 @@ public class BlackjackView extends Stage {
 		screenWidth = this.getWidth();
 		screenHeight = this.getHeight();
 
-		background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.game_bg));
-		texture1 = new Texture1(BitmapFactory.decodeResource(getResources(), R.drawable.stamp));
-		texture2 = new Texture2(BitmapFactory.decodeResource(getResources(), R.drawable.coins));
+		GameObject background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.game_bg));
+		GameObject texture1 = new Texture1(BitmapFactory.decodeResource(getResources(), R.drawable.stamp));
+		GameObject texture2 = new Texture2(BitmapFactory.decodeResource(getResources(), R.drawable.coins));
 
 		background.setRenderListener(this);
-		texture1.setRenderListener(this);
-		texture2.setRenderListener(this);
+		//texture1.setRenderListener(this);
+		//texture2.setRenderListener(this);
 
-		blackjackManager = new BlackjackManager(this);
-		blackjackManager.setRenderListener(this);
+		game = new BlackjackManager(this);
+		game.setRenderListener(this);
 	}
 
 	@Override
@@ -73,7 +69,7 @@ public class BlackjackView extends Stage {
 		public Texture1(Bitmap bitmap) {
 			super(bitmap);
 			x = screenWidth/2 - width/2;
-			y = screenHeight/2 - height/2;
+			y = screenHeight/2 - height/2 - 70;
 		}
 	}
 

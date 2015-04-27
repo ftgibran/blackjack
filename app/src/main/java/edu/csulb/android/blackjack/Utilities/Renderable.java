@@ -7,6 +7,6 @@ import android.graphics.Canvas;
  */
 public interface Renderable {
 
-	void update();
-	void render(Canvas canvas);
+	void onUpdate();
+	void onRender(Canvas canvas);
 }

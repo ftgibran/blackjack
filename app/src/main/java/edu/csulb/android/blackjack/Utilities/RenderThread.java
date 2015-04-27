@@ -39,7 +39,7 @@ public class RenderThread extends Thread {
 			try {
 				canvas = this.surfaceHolder.lockCanvas();
 				synchronized (surfaceHolder) {
-					stage.render(canvas);
+					stage.onRender(canvas);
 				}
 
 			}catch(Exception e) {}

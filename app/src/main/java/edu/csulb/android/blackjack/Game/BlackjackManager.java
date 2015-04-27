@@ -2,7 +2,9 @@ package edu.csulb.android.blackjack.Game;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.widget.Button;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 import edu.csulb.android.blackjack.R;
 import edu.csulb.android.blackjack.Utilities.GameObject;
@@ -12,7 +14,7 @@ import edu.csulb.android.blackjack.Utilities.Stage;
  * Created by FelipeGibran on 4/22/2015.
  */
 public class BlackjackManager extends GameObject{
-	private final static int DEFAULT_SLEEP_TIME = 1000;
+	private final static int DEFAULT_SLEEP_TIME = 600;
 
 	public final static int MAX_CARD_VALUE = 10; 	//the maximum value of a card in Black Jack (excluding aces!)
 	public final static int MIN_A_VALUE = 1; 		//the minimum value of a aces card
@@ -31,7 +33,9 @@ public class BlackjackManager extends GameObject{
 	private Player player;
 	private Deck deck;
 
-	boolean retry = true;
+	private Prompt prompt;
+
+	public boolean end = false;
 
 	/**
 	 * Defines the main attributes in game like: dealer and players
@@ -41,6 +45,15 @@ public class BlackjackManager extends GameObject{
 	{
 		this.stage = stage;
 		cardModel = BitmapFactory.decodeResource(stage.getResources(), R.drawable.card_deck);
+		setGame();
+	}
+
+	public void setGame()
+	{
+		prompt = new Prompt();
+		prompt.setX(30);
+		prompt.setY(stage.screenHeight /2 - 50);
+		prompt.setRenderListener(stage);
 
 		deck = new Deck();
 		deck.shuffle();
@@ -52,44 +65,139 @@ public class BlackjackManager extends GameObject{
 		dealer = new Player(DEFAULT_DEALER_NAME); //this is the dealer
 		dealer.setBitmap(cardModel);
 		dealer.setX(stage.screenWidth/2);
-		dealer.setY(150);
+		dealer.setY(100);
 		dealer.setRenderListener(stage);
 
-		player = new Player("#Test Player");
+		player = new Player(DEFAULT_PLAYER_NAME);
 		player.setX(stage.screenWidth/2);
-		player.setY(stage.screenHeight - deck.getHeight() -  10);
+		player.setY(stage.screenHeight - deck.getHeight() -  200);
 		player.setRenderListener(stage);
+	}
 
+	public void deal()
+	{
+		dealer.pickCard(pop_ani(true));
+		dealer.pickCard(pop_ani(false));
+		player.pickCard(pop_ani(true));
+		player.pickCard(pop_ani(true));
 
+		if(player.getAmount() == MAX_BJ_VALUE)
+		{
+			prompt.show("Blackjack! Instantly won!");
+			plusSleep();
+			//setGame();
+		}
+	}
+
+	public void hit()
+	{
+		player.pickCard(pop_ani(true));
+
+		if(player.getAmount() > MAX_BJ_VALUE)
+		{
+			prompt.show("You have bursted! You lose");
+			plusSleep();
+			//setGame();
+		}
+	}
+
+	public void stand()
+	{
+		prompt.show("The dealer will now show his card!");
+
+		for(int i = 0; i<3; i++) plusSleep();
+
+		dealer.showAllCards();
+		sleep();
+
+		while (dealer.getAmount() < MIN_DEALER_AMOUNT)
+			dealer.pickCard(pop_ani(true));
+
+		if ((player.getAmount() >= dealer.getAmount() || dealer.getAmount() > MAX_BJ_VALUE) && player.getAmount() != MAX_BJ_VALUE)
+		{
+			prompt.show("You Won!");
+			plusSleep();
+			//setGame();
+		} else
+		{
+			prompt.show("You Lose!");
+			plusSleep();
+		}
+	}
+
+	public Card pop_ani(boolean flip)
+	{
+		sleep();
+
+		if(flip)
+		{
+			deck.peek().flip();
+			sleep();
+		}
+
+		return deck.pop();
+	}
+
+	public class Prompt extends GameObject {
+
+		String text;
+		Paint paint;
+		int alpha = 255;
+
+		public Prompt() {
+			super();
+			text = "";
+			paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		}
+
+		public String getText()
+		{
+			return this.text;
+		}
+
+		public void show(String text)
+		{
+			this.text = text;
+			this.alpha = 255;
+		}
+
+		public void clear() {
+			this.text = "";
+		}
+
+		@Override
+		public void onUpdate() {
+			super.onUpdate();
+
+			if(text.equals("")) return;
+			if(alpha == 255) longSleep();
+
+			alpha -= 1;
+
+			if(alpha <= 0)
+				clear();
+		}
+
+		@Override
+		public void onRender(Canvas canvas) {
+			paint.setColor(Color.WHITE);
+			paint.setTextSize(28);
+			paint.setShadowLayer(3f, 0f, 3f, Color.BLACK);
+			paint.setAlpha(alpha);
+			canvas.drawText(text, getX(), getY(), paint);
+		}
 	}
 
 	/**
 	 * This is the main function of the game. It controls all the game progress!
 	 */
 	@Override
-	public void update() {
+	public void onUpdate() {
 
-		while (retry) {
-			sleep();
-			player.pickCard(deck.pop(true));
-			sleep();
-			player.pickCard(deck.pop(true));
-			sleep();
-			player.pickCard(deck.pop(true));
-			sleep();
-			player.pickCard(deck.pop(true));
-			sleep();
-			player.pickCard(deck.pop(true));
-			sleep();
-
-			dealer.pickCard(deck.pop(false));
-			sleep();
-			dealer.pickCard(deck.pop(true));
-			sleep();
-
-			deck.peek().flip();
-			retry = false;
-		}
+		/*
+		 * That is the first part of the game
+		 * It shows all cards in game, and asks for each if they want another card
+		 */
 
 		/*
 		 * That is the first part of the game
@@ -269,4 +377,18 @@ public class BlackjackManager extends GameObject{
 		stage.delay(DEFAULT_SLEEP_TIME);
 	}
 
+	public void plusSleep()
+	{
+		stage.delay(3*DEFAULT_SLEEP_TIME);
+	}
+
+	public void longSleep()
+	{
+		stage.delay(6*DEFAULT_SLEEP_TIME);
+	}
+
+	public boolean end()
+	{
+		return end;
+	}
 }

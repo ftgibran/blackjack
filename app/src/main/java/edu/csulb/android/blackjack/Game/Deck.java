@@ -26,15 +26,15 @@ public class Deck extends GameObject {
 	}
 
 	@Override
-	public void render(Canvas canvas){
+	public void onRender(Canvas canvas){
 		float x = getX();
-		float y =getY();
+		float y = getY();
 		for(int i=0; i < cardPool.size()-1; i += 5)
 		{
 			Card c = cardPool.get(i);
 			c.setX(x);
 			c.setY(y);
-			c.render(canvas);
+			c.onRender(canvas);
 			x -= 1.5f;
 			y -= 1.5f;
 		}
@@ -42,7 +42,7 @@ public class Deck extends GameObject {
 		Card last = peek();
 		last.setX(x);
 		last.setY(y);
-		last.render(canvas);
+		last.onRender(canvas);
 	}
 
 	@Override
@@ -72,14 +72,21 @@ public class Deck extends GameObject {
 
 	public Card pop()
 	{
-		return pop(DEFAULT_VISIBILITY);
+		Card c;
+
+		try {
+			c = cardPool.pop();
+		} catch (EmptyStackException e) {
+			System.err.println("There is no more card left!");
+			return null;
+		}
+
+		return c;
 	}
+
 	public Card pop(boolean visibility)
 	{
 		Card c;
-
-		cardPool.peek().flip();
-		stage.delay(1000);
 
 		try {
 			c = cardPool.pop();
@@ -116,6 +123,7 @@ public class Deck extends GameObject {
 			for(int j=0;j<Card.SUITDB.length;j++)
 			{
 				Card c = new Card(Card.RANKDB[i], Card.SUITDB[j], DEFAULT_VISIBILITY);
+				c.setRotation(rotation);
 				cardPool.add(c);
 
 				c.setCardID(cardPool.indexOf(c));

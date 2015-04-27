@@ -1,6 +1,8 @@
 package edu.csulb.android.blackjack.Game;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +11,7 @@ import edu.csulb.android.blackjack.Utilities.GameObject;
 
 /**
  * Created by FelipeGibran on 4/22/2015.
+ *
  */
 public class Player extends GameObject {
 	private final String DEFAULT_NICKNAME = "Default Player";
@@ -20,9 +23,12 @@ public class Player extends GameObject {
 
 	private List<Card> cardsInHand = new ArrayList<Card>();
 
+	private Paint paint;
+
 	public Player()
 	{
 		// TODO Auto-generated constructor stub
+		this.nickname = DEFAULT_NICKNAME;
 		request = true;
 	}
 
@@ -34,16 +40,23 @@ public class Player extends GameObject {
 	}
 
 	@Override
-	public void render(Canvas canvas){
+	public void onRender(Canvas canvas){
 		float x = getX();
 		float y = getY();
 
 		for (Card c : cardsInHand) {
 			c.setX(x);
 			c.setY(y);
-			c.render(canvas);
+			c.onRender(canvas);
 			x += 22;
 		}
+
+		paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+		paint.setColor(Color.WHITE);
+		paint.setTextSize(20);
+		paint.setShadowLayer(3f, 0f, 3f, Color.BLACK);
+		canvas.drawText(nickname + " (" + getAmount() + ")", getX(), getY() - 15, paint);
 	}
 
 	@Override

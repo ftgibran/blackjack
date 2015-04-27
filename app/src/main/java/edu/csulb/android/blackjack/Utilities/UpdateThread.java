@@ -29,7 +29,7 @@ public class UpdateThread extends Thread {
 		while(isRunning()) {
 			startTime = System.nanoTime();
 
-			stage.update();
+			stage.onUpdate();
 
 			timeMillis = (System.nanoTime() - startTime) / 1000000;
 			waitTime = targetTime-timeMillis;

@@ -2,6 +2,7 @@ package edu.csulb.android.blackjack.Utilities;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -28,11 +29,25 @@ public abstract class Stage extends SurfaceView implements SurfaceHolder.Callbac
 
 	/**
 	 * Creates a Stage that manages the loop of the Game.
-	 * It has two loops from UpdateThread Class that uses update() method and Render Thread Class that uses render() method.
-	 * @param context
+	 * It has two loops from UpdateThread Class that uses onUpdate() method and Render Thread Class that uses onRender() method.
+	 * @param context Context
 	 */
 	public Stage(Context context) {
 		super(context);
+		this.context = context;
+		this.listeners = new ArrayList<>();
+		holder = getHolder();
+		holder.addCallback(this);
+	}
+
+	/**
+	 * Creates a Stage that manages the loop of the Game.
+	 * It has two loops from UpdateThread Class that uses onUpdate() method and Render Thread Class that uses onRender() method.
+	 * @param context Context
+	 * @param attrs Attributes
+	 */
+	public Stage(Context context, AttributeSet attrs){
+		super(context, attrs);
 		this.context = context;
 		this.listeners = new ArrayList<>();
 		holder = getHolder();
@@ -80,26 +95,26 @@ public abstract class Stage extends SurfaceView implements SurfaceHolder.Callbac
 	}
 
 	/**
-	 * This is a Thread from UpdateThread class responsible to update data.
+	 * This is a Thread from UpdateThread class responsible to onUpdate data.
 	 * It has a loop of 60 fps.
 	 */
 	@Override
-	public void update()
+	public void onUpdate()
 	{
 		for(Renderable r:listeners)
-			r.update();
+			r.onUpdate();
 	}
 
 	/**
-	 * This is a Thread from RenderThread class responsible to render bitmaps image.
+	 * This is a Thread from RenderThread class responsible to onRender bitmaps image.
 	 * It has a loop of 60 fps.
 	 * @param canvas Canvas.
 	 */
 	@Override
-	public void render(Canvas canvas)
+	public void onRender(Canvas canvas)
 	{
 		for(Renderable r:listeners)
-			r.render(canvas);
+			r.onRender(canvas);
 	}
 
 	/**

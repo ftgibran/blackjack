@@ -2,6 +2,7 @@ package edu.csulb.android.blackjack.Utilities;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 
 /**
@@ -24,6 +25,8 @@ public class GameObject implements Renderable {
 
 	protected float width;
 	protected float height;
+
+	protected float rotation;
 
 	protected Rect rect;
 
@@ -53,13 +56,13 @@ public class GameObject implements Renderable {
 		stage.getListeners().add(this);
 	}
 
-	public void removeRenderListener(Stage stage) {
-		this.stage = null;
+	public void removeRenderListener() {
 		stage.getListeners().remove(this);
+		this.stage = null;
 	}
 
 	@Override
-	public void update() {
+	public void onUpdate() {
 		vx += sx*dt;
 		vy += sy*dt;
 
@@ -68,7 +71,7 @@ public class GameObject implements Renderable {
 	}
 
 	@Override
-	public void render(Canvas canvas) {
+	public void onRender(Canvas canvas) {
 		if(bitmap != null)
 			canvas.drawBitmap(bitmap, x, y, null);
 	}
@@ -84,6 +87,11 @@ public class GameObject implements Renderable {
 		width = bitmap.getWidth();
 		height = bitmap.getHeight();
 		this.bitmap = Bitmap.createScaledBitmap(this.bitmap,(int)width,(int)height, true);
+
+		Matrix matrix = new Matrix();
+		matrix.postRotate(rotation);
+
+		this.bitmap = Bitmap.createBitmap(this.bitmap , 0, 0, (int)width,(int)height, matrix, true);
 	}
 
 	public float getX() {
@@ -158,6 +166,20 @@ public class GameObject implements Renderable {
 	public void setHeight(float height) {
 		this.height = Math.abs(height);
 		this.bitmap = Bitmap.createScaledBitmap(this.bitmap,(int)width,(int)height, true);
+	}
+
+	public float getRotation() {
+		return rotation;
+	}
+
+	public void setRotation(float rotation) {
+		this.rotation = rotation;
+
+		if(this.bitmap == null)	return;
+		Matrix matrix = new Matrix();
+		matrix.postRotate(rotation);
+
+		this.bitmap = Bitmap.createBitmap(this.bitmap , 0, 0,(int)width,(int)height, matrix, true);
 	}
 
 	public void setRect()

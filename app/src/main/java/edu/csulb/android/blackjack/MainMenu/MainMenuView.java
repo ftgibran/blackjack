@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 
 import edu.csulb.android.blackjack.R;
@@ -16,14 +17,13 @@ import edu.csulb.android.blackjack.Utilities.Stage;
  *
  */
 public class MainMenuView extends Stage {
-	//
-	private GameObject background;
-	private GameObject blackjackLogo;
-	private GameObject tapString;
-	//
 
 	public MainMenuView(Context context) {
 		super(context);
+	}
+
+	public MainMenuView(Context context, AttributeSet attrs){
+		super(context, attrs);
 	}
 
 	@Override
@@ -31,13 +31,13 @@ public class MainMenuView extends Stage {
 		screenWidth = this.getWidth();
 		screenHeight = this.getHeight();
 
-		background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.bg));
+		GameObject background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.bg));
 		background.setRenderListener(this);
 
-		blackjackLogo = new BlackjackLogo(BitmapFactory.decodeResource(getResources(), R.drawable.logo));
+		GameObject blackjackLogo = new BlackjackLogo(BitmapFactory.decodeResource(getResources(), R.drawable.logo));
 		blackjackLogo.setRenderListener(this);
 
-		tapString = new TapString(BitmapFactory.decodeResource(getResources(), R.drawable.tap));
+		GameObject tapString = new TapString(BitmapFactory.decodeResource(getResources(), R.drawable.tap));
 		tapString.setRenderListener(this);
 	}
 
@@ -66,18 +66,18 @@ public class MainMenuView extends Stage {
 		}
 
 		@Override
-		public void update()
+		public void onUpdate()
 		{
-			super.update();
+			super.onUpdate();
 			if(x < -width) x=0;
 		}
 
 		@Override
-		public void render(Canvas canvas)
+		public void onRender(Canvas canvas)
 		{
-			super.render(canvas);
+			super.onRender(canvas);
 			x += width;
-			super.render(canvas);
+			super.onRender(canvas);
 			x -= width;
 		}
 	}
@@ -110,7 +110,7 @@ public class MainMenuView extends Stage {
 		}
 
 		@Override
-		public void render(Canvas canvas) {
+		public void onRender(Canvas canvas) {
 			Paint paint = new Paint();
 			paint.setAlpha(Math.abs(alpha));
 			if(alpha < -255)
@@ -119,7 +119,7 @@ public class MainMenuView extends Stage {
 		}
 
 		@Override
-		public void update() {
+		public void onUpdate() {
 			alpha -= 4;
 		}
 	}
