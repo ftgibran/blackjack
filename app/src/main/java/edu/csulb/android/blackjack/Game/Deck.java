@@ -7,36 +7,42 @@ import java.util.Collections;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
-import edu.csulb.android.blackjack.R;
 import edu.csulb.android.blackjack.Utilities.GameObject;
 
 /**
  * Created by FelipeGibran on 4/18/2015.
+ *
  */
 public class Deck extends GameObject {
 
 	private static final boolean DEFAULT_VISIBILITY = false;
-	public static final int DEFAULT_DECK_DRAWABLE = R.drawable.card_deck;
 
 	private Stack<Card> cardPool;
 
 	public Deck()
 	{
-		setCardPool();
+		cardPool = new Stack<>();
+		setPool();
+	}
+
+	public Deck(boolean empty)
+	{
+		cardPool = new Stack<>();
+		if(!empty)
+			setPool();
 	}
 
 	@Override
 	public void onRender(Canvas canvas){
 		float x = getX();
 		float y = getY();
-		for(int i=0; i < cardPool.size()-1; i += 5)
+		for(int i=0; i < cardPool.size()-1; i += 1)
 		{
 			Card c = cardPool.get(i);
 			c.setX(x);
 			c.setY(y);
 			c.onRender(canvas);
-			x -= 1.5f;
-			y -= 1.5f;
+			x -= c.getWidth() * 0.03;
 		}
 
 		Card last = peek();
@@ -68,6 +74,20 @@ public class Deck extends GameObject {
 			return 0;
 		else
 			return cardPool.get(0).getHeight();
+	}
+
+	public void push(Card card) {
+		cardPool.push(card);
+	}
+
+	public void push(Card[] cards) {
+		for(Card c: cards)
+			cardPool.push(c);
+	}
+
+	public void push(Deck deck) {
+		cardPool.addAll(deck.getPool());
+		deck.clear();
 	}
 
 	public Card pop()
@@ -106,6 +126,11 @@ public class Deck extends GameObject {
 		return cardPool.peek();
 	}
 
+	public void clear()
+	{
+		cardPool.clear();
+	}
+
 	public void shuffle()
 	{
 		Collections.shuffle(cardPool);
@@ -116,9 +141,8 @@ public class Deck extends GameObject {
 		return cardPool.size();
 	}
 
-	private void setCardPool()
+	public void setPool()
 	{
-		cardPool = new Stack<>();
 		for(int i=0;i<Card.RANKDB.length;i++)
 			for(int j=0;j<Card.SUITDB.length;j++)
 			{
@@ -130,9 +154,10 @@ public class Deck extends GameObject {
 			}
 	}
 
+	public Stack<Card> getPool() {
+		return cardPool;
+	}
+
 	public Card getCardByID(int id) { return cardPool.get(id); }
 
-	public void showCards() {
-
-	}
 }

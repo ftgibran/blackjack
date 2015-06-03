@@ -48,7 +48,7 @@ public class Player extends GameObject {
 			c.setX(x);
 			c.setY(y);
 			c.onRender(canvas);
-			x += 22;
+			x += c.getWidth() / 5;
 		}
 
 		paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -72,7 +72,7 @@ public class Player extends GameObject {
 		if(cardsInHand.isEmpty())
 			return 0;
 		else
-			return cardsInHand.get(0).getHeight();
+			return cardsInHand.get(0).getHeight() + 40;
 	}
 
 	public int getAmount()

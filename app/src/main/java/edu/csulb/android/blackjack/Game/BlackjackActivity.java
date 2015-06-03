@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import edu.csulb.android.blackjack.R;
 
@@ -14,9 +14,9 @@ import edu.csulb.android.blackjack.R;
 public class BlackjackActivity extends Activity {
 
 	private BlackjackView blackjack;
-	private ImageButton deal;
-	private ImageButton hit;
-	private ImageButton stand;
+	private ImageView deal;
+	private ImageView hit;
+	private ImageView stand;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,14 +28,14 @@ public class BlackjackActivity extends Activity {
 
 		blackjack = (BlackjackView) findViewById(R.id.blackjack);
 
-		deal = (ImageButton)findViewById(R.id.deal);
+		deal = (ImageView)findViewById(R.id.deal);
 		deal.setOnClickListener(new Deal());
 
-		hit = (ImageButton)findViewById(R.id.hit);
+		hit = (ImageView)findViewById(R.id.hit);
 		hit.setVisibility(Button.INVISIBLE);
 		hit.setOnClickListener(new Hit());
 
-		stand = (ImageButton)findViewById(R.id.stand);
+		stand = (ImageView)findViewById(R.id.stand);
 		stand.setVisibility(Button.INVISIBLE);
 		stand.setOnClickListener(new Stand());
 
@@ -48,7 +48,12 @@ public class BlackjackActivity extends Activity {
 			deal.setVisibility(Button.INVISIBLE);
 			hit.setVisibility(Button.VISIBLE);
 			stand.setVisibility(Button.VISIBLE);
-			blackjack.game.deal();
+
+			if (blackjack.game.deal()) {
+				deal.setVisibility(Button.VISIBLE);
+				hit.setVisibility(Button.INVISIBLE);
+				stand.setVisibility(Button.INVISIBLE);
+			}
 		}
 	}
 
@@ -56,7 +61,11 @@ public class BlackjackActivity extends Activity {
 	{
 		@Override
 		public void onClick(View v) {
-			blackjack.game.hit();
+			if (blackjack.game.hit()) {
+				deal.setVisibility(Button.VISIBLE);
+				hit.setVisibility(Button.INVISIBLE);
+				stand.setVisibility(Button.INVISIBLE);
+			}
 		}
 	}
 
@@ -65,6 +74,10 @@ public class BlackjackActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			blackjack.game.stand();
+
+			deal.setVisibility(Button.VISIBLE);
+			hit.setVisibility(Button.INVISIBLE);
+			stand.setVisibility(Button.INVISIBLE);
 		}
 	}
 

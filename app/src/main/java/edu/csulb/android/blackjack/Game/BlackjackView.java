@@ -32,8 +32,8 @@ public class BlackjackView extends Stage {
 		screenHeight = this.getHeight();
 
 		GameObject background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.game_bg));
-		GameObject texture1 = new Texture1(BitmapFactory.decodeResource(getResources(), R.drawable.stamp));
-		GameObject texture2 = new Texture2(BitmapFactory.decodeResource(getResources(), R.drawable.coins));
+		//GameObject texture1 = new Texture1(BitmapFactory.decodeResource(getResources(), R.drawable.stamp));
+		//GameObject texture2 = new Texture2(BitmapFactory.decodeResource(getResources(), R.drawable.coins));
 
 		background.setRenderListener(this);
 		//texture1.setRenderListener(this);
